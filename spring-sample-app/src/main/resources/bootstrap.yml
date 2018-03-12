@@ -1,0 +1,18 @@
+spring.application.name: backend
+spring.cloud.vault:
+    fail-fast: true
+    host: ${vault.host:localhost}
+    port: ${vault.port:8200}
+    scheme: https
+    authentication: KUBERNETES
+    kubernetes:
+      role: backend
+      service-account-token-file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    generic:
+      enabled: true
+    postgresql:
+      enabled: true
+      role: backend
+      backend: database
+      username-property: spring.datasource.username
+      password-property: spring.datasource.password
