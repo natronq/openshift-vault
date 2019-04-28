@@ -2,9 +2,11 @@
 set -e
 set -o pipefail
 
+namespace=${1-"secrets-management"}
+
 echo "Testing vault integration..."
 # Test vault login
-vault write auth/kubernetes/login role=backend jwt=$(oc serviceaccounts get-token default -n secret-management)
+vault write auth/kubernetes/login role=backend jwt=$(oc serviceaccounts get-token default -n ${namespace})
 # Test service
 route=$(oc get route spring-sample-app -o jsonpath={.spec.host})
 curl http://$route/health 
