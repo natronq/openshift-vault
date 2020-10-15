@@ -7,7 +7,7 @@ This repository demonstrates how to deploy HashiCorps Vault on OpenShift and lev
 1. Create a project
 
     ```bash
-    $ oc create new-project secret-management
+    $ oc new-project secret-management
     ```
 
 2. Deploy a database and HashiCorp's Vault
@@ -55,7 +55,7 @@ This repository demonstrates how to deploy HashiCorps Vault on OpenShift and lev
     ```bash
     $ export KEYS=t7grHZRi8dLcNDe04X8KcuixjEdzR5xXmpXE1N2TUo4=
     $ export ROOT_TOKEN=f4949362-6e88-0980-c604-51ce7d62c4eb
-    $ vault unseal -tls-skip-verify $KEYS
+    $ vault operator unseal -tls-skip-verify $KEYS
 
     Key             Value
     ---             -----

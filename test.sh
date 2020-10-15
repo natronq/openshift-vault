@@ -4,7 +4,7 @@ set -o pipefail
 
 echo "Testing vault integration..."
 # Test vault login
-vault write auth/kubernetes/login role=backend jwt=$(oc serviceaccounts get-token default -n secret-management)
+vault write -tls-skip-verify auth/kubernetes/login role=backend jwt=$(oc serviceaccounts get-token default -n secret-management)
 # Test service
 route=$(oc get route spring-sample-app -o jsonpath={.spec.host})
 curl http://$route/health 
