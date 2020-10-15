@@ -23,7 +23,7 @@ function vault_enable_kubernets_auth {
   # Get the JWT token for the servie account
   reviewer_service_account_jwt=$(oc serviceaccounts get-token vault-auth)
   # Get the CA certificate for our cluster
-  pod=$(oc get pods -n $(oc project -q) | grep vault | awk '{print $1}')
+  pod=$(oc get pods -n $(oc project -q) | grep vault |grep -v deploy | awk '{print $1}')
   oc exec $pod -- cat /var/run/secrets/kubernetes.io/serviceaccount/ca.crt >> ca.crt
   echo "Enabling kubernetes auth backend..."
   vault auth enable kubernetes
@@ -31,9 +31,11 @@ function vault_enable_kubernets_auth {
   vault write auth/kubernetes/config token_reviewer_jwt=$reviewer_service_account_jwt kubernetes_host=https://kubernetes.default.svc.cluster.local:443 kubernetes_ca_cert=@ca.crt 
   rm ca.crt
   echo "Creating sample policy with name 'backend'"
-  vault policy-write backend vault/backend-policy.hcl 
+  vault policy write backend vault/backend-policy.hcl 
   echo "Creating sample role with name 'backend' bound to namespace 'secret-management'"
   vault write auth/kubernetes/role/backend bound_service_account_names=default bound_service_account_namespaces=secret-management policies=backend ttl=2h
+  echo "Enabling KV for secret path"
+  vault secrets enable -path=secret kv
 }
 
 export VAULT_SKIP_VERIFY=true
