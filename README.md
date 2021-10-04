@@ -72,7 +72,7 @@ This repository demonstrates how to deploy HashiCorps Vault on OpenShift and lev
 4. Configure vault
 
     ```bash
-    $ vault login $ROOT_TOKEN 
+    $ vault login -tls-skip-verify $ROOT_TOKEN 
     $ ./init-vault.sh
 
     Creating service account for Vault...
